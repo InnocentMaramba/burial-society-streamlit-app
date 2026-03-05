@@ -1,13 +1,18 @@
 import streamlit as st
 import data_cleaning_model as dc
-import zipfile
-import io
 
 # App Title 
-st.title("Econet Life Burial Society Data Validation Model")
 st.markdown(
     """
-    **Upload your :rainbow[Policy File], :rainbow[Revenue File], and :rainbow[Claims File]
+    <h1 style="text-align: center;">
+    Econet Life Burial Society Data Validation Model
+    </h1>
+    """,
+    unsafe_allow_html=True
+)
+st.markdown(
+    """
+    Upload your Policy File, Revenue File, and Claims File
     to clean and validate the data. The model will process the files and provide cleaned datasets along with flagged outputs for any discrepancies found.**
     """
 )
