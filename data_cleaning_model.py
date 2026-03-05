@@ -83,7 +83,7 @@ def read_claims_data(uploaded_file) -> pd.DataFrame:
             raise ValueError(
                 "Unsupported file type. Please upload CSV, Excel, or Parquet."
             )
-    return claims
+        return claims
 
 # Policy Data Function to standardize columns
 def standardize_columns(df: pd.DataFrame) -> pd.DataFrame:
