@@ -2,6 +2,9 @@
 primaryColor = "#F5B400"
 backgroundColor = "#FFFFFF"
 secondaryBackgroundColor = "#0B1C2D"
-textColor - "#0B1C2D"
+textColor = "#0B1C2D"
 font = "sans serif"
+
+[server]
+maxUploadSize = 300
 
