@@ -24,10 +24,11 @@ claims_file = st.file_uploader("Upload Claims File", type=["csv","xlsx","parquet
 if policy_file and revenue_file and claims_file:
 
     st.info("Processing data...")
+    with st.spinner("Running data cleaning and validation... This may take a few moments."):
 
 
-    # Run Full Workflow 
-    results = dc.run_data_cleaning(policy_file, revenue_file, claims_file)
+        # Run Full Workflow 
+        results = dc.run_data_cleaning(policy_file, revenue_file, claims_file)
 
     # Get Cleaned DataFrames 
     policy_df = results["policy_df"]
