@@ -1,60 +1,56 @@
 import pandas as pd
 from datetime import datetime
-import streamlit as st
 today = datetime.today().date()
+import streamlit as st
 
 @st.cache_data
 # Policy Data Function to read the policy file
 def read_policy_data(uploaded_file) -> pd.DataFrame:
-
-    with st.spinner("Reading Policy Data..."):
    
-        filename = uploaded_file.name.lower()
-        if filename.endswith(".csv"):
-            df = pd.read_csv(uploaded_file)
-        elif filename.endswith((".xlsx", ".xls")):
-            # Read all sheets
-            sheets = pd.read_excel(uploaded_file, sheet_name=None)
-            if isinstance(sheets, dict):
-                df = pd.concat(
-                    [df.assign(source_sheet=sheet_name) for sheet_name, df in sheets.items()],
-                    ignore_index=True)
-            else:
-                df = next(iter(sheets.values()))
-
-        elif filename.endswith(".parquet"):
-            df = pd.read_parquet(uploaded_file)
+    filename = uploaded_file.name.lower()
+    if filename.endswith(".csv"):
+        df = pd.read_csv(uploaded_file)
+    elif filename.endswith((".xlsx", ".xls")):
+        # Read all sheets
+        sheets = pd.read_excel(uploaded_file, sheet_name=None)
+        if isinstance(sheets, dict):
+            df = pd.concat(
+                [df.assign(source_sheet=sheet_name) for sheet_name, df in sheets.items()],
+                ignore_index=True)
         else:
-            raise ValueError(
-                "Unsupported file type. Please upload CSV, Excel, or Parquet."
-            )
+            df = next(iter(sheets.values()))
+
+    elif filename.endswith(".parquet"):
+        df = pd.read_parquet(uploaded_file)
+    else:
+        raise ValueError(
+            "Unsupported file type. Please upload CSV, Excel, or Parquet."
+        )
     return df
 
 # Revenue Function for reading the revenue data
 def read_revenue_data(uploaded_file) -> pd.DataFrame:
 
-    with st.spinner("Reading Revenue Data..."):
+    filename = uploaded_file.name.lower()
+    if filename.endswith(".csv"):
+        df_rev = pd.read_csv(uploaded_file)
 
-        filename = uploaded_file.name.lower()
-        if filename.endswith(".csv"):
-            df_rev = pd.read_csv(uploaded_file)
-
-        elif filename.endswith((".xlsx", ".xls")):
-            sheets = pd.read_excel(uploaded_file, sheet_name=None)
-            # Consolidate multiple sheets if present
-            if isinstance(sheets, dict):
-                df_rev = pd.concat(
-                    [df.assign(source_sheet=sheet_name) for sheet_name, df in sheets.items()],
-                    ignore_index=True
-                    )
-            else:
-                df_rev = sheets
-        elif filename.endswith(".parquet"):
-            df_rev = pd.read_parquet(uploaded_file)
+    elif filename.endswith((".xlsx", ".xls")):
+        sheets = pd.read_excel(uploaded_file, sheet_name=None)
+        # Consolidate multiple sheets if present
+        if isinstance(sheets, dict):
+            df_rev = pd.concat(
+                [df.assign(source_sheet=sheet_name) for sheet_name, df in sheets.items()],
+                ignore_index=True
+                )
         else:
-            raise ValueError(
-                "Unsupported file type. Please upload CSV, Excel, or Parquet."
-            )
+            df_rev = sheets
+    elif filename.endswith(".parquet"):
+        df_rev = pd.read_parquet(uploaded_file)
+    else:
+        raise ValueError(
+            "Unsupported file type. Please upload CSV, Excel, or Parquet."
+        )
     return df_rev
 
 # Function to read Claims File
@@ -65,25 +61,22 @@ def read_claims_data(uploaded_file) -> pd.DataFrame:
     Supports CSV, Excel (single or multiple sheets), and Parquet.
     Always returns a single pandas DataFrame.
     """
-    with st.spinner("Reading Claims Data..."):
+    filename = uploaded_file.name.lower()
 
+    if filename.endswith(".csv"):
+        claims = pd.read_csv(uploaded_file)
 
-        filename = uploaded_file.name.lower()
+    elif filename.endswith((".xlsx", ".xls")):
+        claims = pd.read_excel(uploaded_file)
 
-        if filename.endswith(".csv"):
-            claims = pd.read_csv(uploaded_file)
+    elif filename.endswith(".parquet"):
+        claims = pd.read_parquet(uploaded_file)
 
-        elif filename.endswith((".xlsx", ".xls")):
-            claims = pd.read_excel(uploaded_file)
-
-        elif filename.endswith(".parquet"):
-            claims = pd.read_parquet(uploaded_file)
-
-        else:
-            raise ValueError(
-                "Unsupported file type. Please upload CSV, Excel, or Parquet."
-            )
-        return claims
+    else:
+        raise ValueError(
+            "Unsupported file type. Please upload CSV, Excel, or Parquet."
+        )
+    return claims
 
 # Policy Data Function to standardize columns
 def standardize_columns(df: pd.DataFrame) -> pd.DataFrame:
